@@ -1,7 +1,7 @@
 ﻿
-namespace Bingle
+namespace Bingle.Bingo
 {
-   partial class Form1
+   partial class Play
    {
       /// <summary>
       /// Required designer variable.
@@ -29,13 +29,31 @@ namespace Bingle
       /// </summary>
       private void InitializeComponent()
       {
-         this.components = new System.ComponentModel.Container();
+         this.pnlCard = new System.Windows.Forms.Panel();
+         this.SuspendLayout();
+         // 
+         // pnlCard
+         // 
+         this.pnlCard.Location = new System.Drawing.Point(340, 48);
+         this.pnlCard.Name = "pnlCard";
+         this.pnlCard.Size = new System.Drawing.Size(403, 483);
+         this.pnlCard.TabIndex = 0;
+         // 
+         // Play
+         // 
+         this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
          this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-         this.ClientSize = new System.Drawing.Size(800, 450);
-         this.Text = "Form1";
+         this.ClientSize = new System.Drawing.Size(800, 572);
+         this.Controls.Add(this.pnlCard);
+         this.Name = "Play";
+         this.Text = "Play";
+         this.Load += new System.EventHandler(this.Play_Load);
+         this.ResumeLayout(false);
+
       }
 
       #endregion
+
+      private System.Windows.Forms.Panel pnlCard;
    }
 }
-
