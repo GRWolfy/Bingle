@@ -8,10 +8,8 @@ namespace Bingle.Bingo
 {
    public class SelectedNumbersListType
    {
-      //array of ints
       private int[] arr = new int[76];
 
-      //resets all of the values in the array back to 0
       public void reset()
       {
          for (int i = 0; i < 76; i++)
@@ -20,25 +18,21 @@ namespace Bingle.Bingo
          }
       }
 
-      //sets the number called randomly in the form to "used" by storing it in the array
-      public void setUsedNumber(int a)
+      public void setUsedNumber(int n)
       {
-         arr[a] = a;
+         arr[n] = n;
       }
 
-      //checks whether or not the number was called
-      public bool isNumberUsed(int a)
+      public bool isNumberUsed(int n)
       {
-
-         if (arr[a] == a)
+         if (arr[n] == n)
          {
             return true;
          }
-         else
+         else 
          {
             return false;
          }
-
       }
    }
 }

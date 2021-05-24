@@ -9,13 +9,14 @@ using System.Windows.Forms;
 
 namespace Bingle.Functions
 {
-   class Functions
+   class Function
    {
 
       public static string gen = "";
       public static SqlConnection con;
       public static SqlCommand command;
       public static SqlDataReader reader;
+      public static DataTable dt;
 
       public static void fill(string q, DataGridView dgv)
       {

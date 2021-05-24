@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Bingle.Bingo
 {
-   public class InternalCardRep2DArray
+   class InternalCardRep2DArray
    {
       //board & size
       private const int size = 5;
