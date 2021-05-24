@@ -13,6 +13,8 @@ namespace Bingle.Bingo
 {
    public partial class Play : Form
    {
+      private int tempNum = 0;
+
       public Play()
       {
          InitializeComponent();
@@ -167,6 +169,8 @@ namespace Bingle.Bingo
          MessageBox.Show("Cell[" + rowID + "," + colID + "] has been selected!");
          int cellID = rowID * 3 + colID;
 
+         saveBingoNumber();
+
          try
          {
             selectedNumber = Convert.ToInt32(newButton[rowID, colID].Text);
@@ -176,6 +180,7 @@ namespace Bingle.Bingo
                newButton[rowID, colID].BackColor = System.Drawing.Color.Orange;
                internalCardRep2DArray.recordCalledNumber(rowID, colID);
 
+
                Globals.selectedNumbersListObj.setUsedNumber(selectedNumber);
                bingoCount2D = internalCardRep2DArray.isWinner(rowID, colID);
 
@@ -184,6 +189,8 @@ namespace Bingle.Bingo
                   MessageBox.Show("You are a Winner!!", "Winner Found! \n"
                       + "Bingos count = " + (bingoCount2D) + ". Game over!");
                   MessageBox.Show("It took you " + counter + " calls to get a bingo");
+
+                  deleteBingoCard();
                }
 
                playTheGame();
@@ -199,6 +206,41 @@ namespace Bingle.Bingo
          }
       }
 
+      private void saveBingoNumber()
+      {
+         string s = getBingoNumber() + tempNum.ToString() + ",";
+         try
+         {
+            Connection.Connection.DB();
+            Functions.Function.gen = "UPDATE Test SET cardnumber =  '" + s + "' WHERE playerid = 1 ";
+            Functions.Function.command = new SqlCommand(Functions.Function.gen, Connection.Connection.con);
+            Functions.Function.command.ExecuteNonQuery();
+            Connection.Connection.con.Close();
+         }
+
+         catch (Exception ex)
+         {
+            MessageBox.Show(ex.Message);
+         }
+      }
+
+      private void deleteBingoCard()
+      {
+         try
+         {
+            Connection.Connection.DB();
+            Functions.Function.gen = "DELETE FROM Test WHERE playerid = 1 ";
+            Functions.Function.command = new SqlCommand(Functions.Function.gen, Connection.Connection.con);
+            Functions.Function.command.ExecuteNonQuery();
+            Connection.Connection.con.Close();
+         }
+
+         catch (Exception ex)
+         {
+            MessageBox.Show(ex.Message);
+         }
+      }
+
       public void playTheGame()
       {
          int num = rand.Next(1, 76);//gets a random number between and 1 and 75 (inclusive)
@@ -210,6 +252,7 @@ namespace Bingle.Bingo
 
          if (sn.isNumberUsed(num) == false)
          {
+            saveCardNumber(num);
             counter++;
             if (num > 0 && num <= 15)
             {
@@ -236,21 +279,6 @@ namespace Bingle.Bingo
                txtRandNum.Text = "O " + num;
                nextCalledNumber = num;
             }
-
-            string s = getBingoNumber() + num.ToString() + ",";
-            try
-            {
-               Connection.Connection.DB();
-               Functions.Function.gen = "UPDATE Test SET bingonumber =  '" + s +"' WHERE playerid = 1 ";
-               Functions.Function.command = new SqlCommand(Functions.Function.gen, Connection.Connection.con);
-               Functions.Function.command.ExecuteNonQuery();
-               Connection.Connection.con.Close();
-            }
-
-            catch (Exception ex)
-            {
-               MessageBox.Show(ex.Message);
-            }
          }
          else
          {
@@ -260,7 +288,26 @@ namespace Bingle.Bingo
 
       }
 
-      private string getBingoNumber()
+      private void saveCardNumber(int num)
+      {
+         tempNum = num;
+         string s = getCardNumber() + num.ToString() + ",";
+         try
+         {
+            Connection.Connection.DB();
+            Functions.Function.gen = "UPDATE Test SET bingonumber =  '" + s + "' WHERE playerid = 1 ";
+            Functions.Function.command = new SqlCommand(Functions.Function.gen, Connection.Connection.con);
+            Functions.Function.command.ExecuteNonQuery();
+            Connection.Connection.con.Close();
+         }
+
+         catch (Exception ex)
+         {
+            MessageBox.Show(ex.Message);
+         }
+      }
+
+      private string getCardNumber()
       {
          string s = "";
          
@@ -285,7 +332,32 @@ namespace Bingle.Bingo
          return s;
       }
 
-         public int convertCharToInt(char c)
+      private string getBingoNumber()
+      {
+         string s = "";
+
+         try
+         {
+            Connection.Connection.DB();
+            Functions.Function.gen = "SELECT cardnumber FROM Test WHERE playerid = 1 ";
+            Functions.Function.command = new SqlCommand(Functions.Function.gen, Connection.Connection.con);
+            Functions.Function.reader = Functions.Function.command.ExecuteReader();
+
+            if (Functions.Function.reader.HasRows)
+            {
+               Functions.Function.reader.Read();
+               s = Functions.Function.reader["cardnumber"].ToString();
+            }
+         }
+         catch (Exception ex)
+         {
+            MessageBox.Show(ex.Message);
+         }
+
+         return s;
+      }
+
+      public int convertCharToInt(char c)
       {
          int bar = int.Parse(c.ToString());
          return bar;
@@ -297,8 +369,10 @@ namespace Bingle.Bingo
       {
          try
          {
+            //string zero = "0,";
             Connection.Connection.DB();
-            Functions.Function.gen = "INSERT INTO test(playerid, bingonumber, cardnumber) VALUES(1, 0, 0 )";
+            Functions.Function.gen = "INSERT INTO test(playerid) VALUES(1)";
+            //Functions.Function.gen = "INSERT INTO test(playerid, bingonumber, cardnumber) VALUES(1, '"+ zero +"', '"+ zero +"' )";
             Functions.Function.command = new SqlCommand(Functions.Function.gen, Connection.Connection.con);
             Functions.Function.command.ExecuteNonQuery();
             Connection.Connection.con.Close();
@@ -317,6 +391,11 @@ namespace Bingle.Bingo
       {
          //if (txtName.Text != "")
             playTheGame();
+      }
+
+      private void button1_Click(object sender, EventArgs e)
+      {
+         deleteBingoCard();
       }
    }
 }
