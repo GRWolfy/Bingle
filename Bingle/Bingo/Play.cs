@@ -33,12 +33,10 @@ namespace Bingle.Bingo
 
       // Named constants
       private const int BINGOCARDSIZE = 5;
-      private const int NUMBERSPERCOLUMN = 15;
-      private const int MAXBINGONUMBER = 75;
       private char[] bingoLetters = { 'B', 'I', 'N', 'G', 'O' };
       private int nextCalledNumber = 0;
       private int counter = 0; //counts number of time a new number was given, so when it gets to 75, arr can reset
-      private int counter2 = 0; //this counter counts how many times it took the player to get a bingo
+                               //this counter counts how many times it took the player to get a bingo
                                 // This next statement does three things.  See if you can figure out what they are
       private Button[,] newButton = new Button[BINGOCARDSIZE, BINGOCARDSIZE];
 
@@ -363,19 +361,55 @@ namespace Bingle.Bingo
          return bar;
       }
 
-
+      private void ViewNumbersPicked()
+      { 
+         
+      }
 
       private void btnPlay_Click(object sender, EventArgs e)
       {
+         if (checkContinueCard() == "true")
+         {
+            MessageBox.Show("PLAYED TRUE", "NEED PROCESS", MessageBoxButtons.OK, MessageBoxIcon.Information);
+         }
+         else
+         {
+            try
+            {
+               Connection.Connection.DB();
+               Functions.Function.gen = "UPDATE Test SET played =  true WHERE playerid = 1";
+               Functions.Function.command = new SqlCommand(Functions.Function.gen, Connection.Connection.con);
+               Functions.Function.command.ExecuteNonQuery();
+               Connection.Connection.con.Close();
+            }
+
+            catch (Exception ex)
+            {
+               MessageBox.Show(ex.Message);
+            }
+
+            createCard();
+            playTheGame();
+         }
+      }
+
+      private string checkContinueCard()
+      {
+         string s = "";
+
          try
          {
-            //string zero = "0,";
             Connection.Connection.DB();
-            Functions.Function.gen = "INSERT INTO test(playerid) VALUES(1)";
-            //Functions.Function.gen = "INSERT INTO test(playerid, bingonumber, cardnumber) VALUES(1, '"+ zero +"', '"+ zero +"' )";
+            Functions.Function.gen = "SELECT * FROM Test WHERE playerid = 1 ";
             Functions.Function.command = new SqlCommand(Functions.Function.gen, Connection.Connection.con);
-            Functions.Function.command.ExecuteNonQuery();
-            Connection.Connection.con.Close();
+            Functions.Function.reader = Functions.Function.command.ExecuteReader();
+
+            if (Functions.Function.reader.HasRows)
+            {
+               Functions.Function.reader.Read();
+
+               s = Functions.Function.reader["played"].ToString();
+            }
          }
 
          catch (Exception ex)
@@ -383,13 +417,11 @@ namespace Bingle.Bingo
             MessageBox.Show(ex.Message);
          }
 
-         createCard();
-         playTheGame();
+         return s;
       }
 
       private void btnDontHave_Click(object sender, EventArgs e)
       {
-         //if (txtName.Text != "")
             playTheGame();
       }
 

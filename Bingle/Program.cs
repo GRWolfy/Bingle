@@ -16,7 +16,7 @@ namespace Bingle
       {
          Application.EnableVisualStyles();
          Application.SetCompatibleTextRenderingDefault(false);
-         Application.Run(new Test());
+         Application.Run(new NavForm());
       }
    }
 }

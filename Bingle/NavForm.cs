@@ -11,9 +11,9 @@ using System.Windows.Forms;
 
 namespace Bingle
 {
-   public partial class Test : Form
+   public partial class NavForm : Form
    {
-      public Test()
+      public NavForm()
       {
          InitializeComponent();
       }

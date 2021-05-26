@@ -34,11 +34,12 @@ namespace Bingle.Bingo
          this.txtRandNum = new System.Windows.Forms.TextBox();
          this.btnDontHave = new System.Windows.Forms.Button();
          this.button1 = new System.Windows.Forms.Button();
+         this.panel1 = new System.Windows.Forms.Panel();
          this.SuspendLayout();
          // 
          // pnlCard
          // 
-         this.pnlCard.Location = new System.Drawing.Point(524, 23);
+         this.pnlCard.Location = new System.Drawing.Point(469, 109);
          this.pnlCard.Name = "pnlCard";
          this.pnlCard.Size = new System.Drawing.Size(610, 555);
          this.pnlCard.TabIndex = 0;
@@ -80,11 +81,19 @@ namespace Bingle.Bingo
          this.button1.UseVisualStyleBackColor = true;
          this.button1.Click += new System.EventHandler(this.button1_Click);
          // 
+         // panel1
+         // 
+         this.panel1.Location = new System.Drawing.Point(1194, 43);
+         this.panel1.Name = "panel1";
+         this.panel1.Size = new System.Drawing.Size(358, 688);
+         this.panel1.TabIndex = 5;
+         // 
          // Play
          // 
          this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
          this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-         this.ClientSize = new System.Drawing.Size(1165, 618);
+         this.ClientSize = new System.Drawing.Size(1579, 773);
+         this.Controls.Add(this.panel1);
          this.Controls.Add(this.button1);
          this.Controls.Add(this.btnDontHave);
          this.Controls.Add(this.txtRandNum);
@@ -105,5 +114,6 @@ namespace Bingle.Bingo
       private System.Windows.Forms.TextBox txtRandNum;
       private System.Windows.Forms.Button btnDontHave;
       private System.Windows.Forms.Button button1;
+      private System.Windows.Forms.Panel panel1;
    }
 }
